@@ -355,10 +355,27 @@ _pb.MouseButton1Click:Connect(function()
     end
 
     -- PlayerToolEvent: ToolMusicText + urlencode(ID จริง) + true
-    local payload = _buildPayload(id)
-    local args = { D[15], payload, nil, true }
-    _reV:FireServer(table.unpack(args))
 
+    -- 1. สร้าง Payload
+local payload = _buildPayload(id)
+
+-- 2. ยิงรีโมทตัวที่ 1 (Boombox เดิม)
+local args1 = { D[15], payload, nil, true }
+pcall(function()
+    _reV:FireServer(table.unpack(args1))
+end)
+
+-- 3. ยิงรีโมทตัวที่ 2 (สกู๊ตเตอร์)
+local args2 = {
+    "PickingScooterMusicText",
+    payload,
+    nil,
+    [4] = true
+}
+pcall(function()
+    local vehicleRemote = game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1NoMoto1rVehicle1s")
+    vehicleRemote:FireServer(table.unpack(args2))
+end)
     _pb.Text = "■  PLAYING..."
     _pb.TextColor3 = Color3.fromRGB(40,180,100)
     _pbs.Color = Color3.fromRGB(20,80,40)
